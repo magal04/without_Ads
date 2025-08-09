@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Universal Clean Video Player</title>
+  <style>
+    body {
+      background: #121212;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 2em;
+    }
+    input {
+      width: 70%;
+      padding: 0.7em;
+      font-size: 1em;
+      border-radius: 6px;
+      border: none;
+    }
+    button {
+      margin-top: 1em;
+      padding: 0.6em 1.5em;
+      font-size: 1em;
+      background-color: #1db954;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    iframe, video {
+      margin-top: 2em;
+      width: 100%;
+      max-width: 800px;
+      height: 450px;
+      border: none;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎥 Universal Clean Video Player</h1>
+  <input id="videoInput" type="text" placeholder="Paste YouTube, Dailymotion, or direct video URL..." />
+  <br>
+  <button onclick="loadVideo()">Play</button>
+  <div id="playerContainer"></div>
+
+  <script>
+    function loadVideo() {
+      const input = document.getElementById("videoInput").value.trim();
+      const container = document.getElementById("playerContainer");
+      container.innerHTML = ""; // Clear previous
+
+      if (input.includes("youtube.com") || input.includes("youtu.be")) {
+        const videoID = extractYouTubeID(input);
+        const ytEmbed = `https://piped.video/embed/${videoID}`;
+        container.innerHTML = `<iframe src="${ytEmbed}" allowfullscreen></iframe>`;
+      }
+      else if (input.includes("dailymotion.com") || input.includes("dai.ly")) {
+        const videoID = extractDailymotionID(input);
+        const dmEmbed = `https://www.dailymotion.com/embed/video/${videoID}`;
+        container.innerHTML = `<iframe src="${dmEmbed}" allowfullscreen></iframe>`;
+      }
+      else if (input.match(/\.(mp4|webm|ogg)(\?.*)?$/)) {
+        container.innerHTML = `
+          <video controls>
+            <source src="${input}" type="video/${getExtension(input)}">
+            Your browser does not support the video tag.
+          </video>`;
+      }
+      else {
+        container.innerHTML = `<p>❌ Unsupported or invalid video URL.</p>`;
+      }
+    }
+
+    function extractYouTubeID(url) {
+      const regex = /(?:v=|\/)([0-9A-Za-z_-]{11})(?:\?|&|$)/;
+      const shortRegex = /youtu\.be\/([0-9A-Za-z_-]{11})/;
+      return (url.match(regex) || url.match(shortRegex) || [])[1];
+    }
+
+    function extractDailymotionID(url) {
+      const regex = /(?:dailymotion\.com\/video\/|dai\.ly\/)([a-zA-Z0-9]+)/;
+      const match = url.match(regex);
+      return match ? match[1] : url;
+    }
+
+    function getExtension(url) {
+      return url.split('.').pop().split(/\#|\?/)[0];
+    }
+  </script>
+</body>
+</html>
