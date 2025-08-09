@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Universal Clean Video Player</title>
+
+  <!-------------------------------------- CSS -------------------------------------->
+
   <style>
     body {
       background: #121212;
@@ -39,13 +42,15 @@
     }
   </style>
 </head>
+<!-------------------------------------- HTML -------------------------------------->
+
 <body>
   <h1>🎥 Universal Clean Video Player</h1>
   <input id="videoInput" type="text" placeholder="Paste YouTube, Dailymotion, or direct video URL..." />
   <br>
   <button onclick="loadVideo()">Play</button>
   <div id="playerContainer"></div>
-
+<!-------------------------------------- Javascript -------------------------------------->
   <script>
     function loadVideo() {
       const input = document.getElementById("videoInput").value.trim();
